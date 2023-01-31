@@ -52,6 +52,25 @@ public struct Session: Codable {
             self.url = url
             self.scheme = scheme
         }
+
+        enum CodingKeys: String, CodingKey {
+            case name
+            case description
+            case icons
+            case url
+            case scheme
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            let name = try container.decode(String.self, forKey: .name)
+
+            let description = try container.decodeIfPresent(String.self, forKey: .description)
+            let url = try container.decode(URL.self, forKey: .url)
+            let scheme = try container.decodeIfPresent(String.self, forKey: .scheme)
+            let icons = (try? container.decodeIfPresent([URL].self, forKey: .icons)) ?? []
+            self.init(name: name, description: description, icons: icons, url: url, scheme: scheme)
+        }
     }
 
     public struct WalletInfo: Codable, Equatable {
