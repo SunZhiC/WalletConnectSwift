@@ -53,7 +53,7 @@ public struct Session: Codable {
             self.scheme = scheme
         }
 
-        enum CodingKeys: String, CodingKey {
+        public enum CodingKeys: String, CodingKey {
             case name
             case description
             case icons
@@ -61,7 +61,7 @@ public struct Session: Codable {
             case scheme
         }
 
-        init(from decoder: Decoder) throws {
+        public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             let name = try container.decode(String.self, forKey: .name)
 
