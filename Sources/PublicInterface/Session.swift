@@ -39,13 +39,13 @@ public struct Session: Codable {
     }
 
     public struct ClientMeta: Codable, Equatable {
-        public let name: String
+        public let name: String?
         public let description: String?
         public let icons: [URL]
-        public let url: URL
+        public let url: URL?
         public let scheme: String?
 
-        public init(name: String, description: String?, icons: [URL], url: URL, scheme: String? = nil) {
+        public init(name: String?, description: String?, icons: [URL], url: URL?, scheme: String? = nil) {
             self.name = name
             self.description = description
             self.icons = icons
@@ -63,10 +63,10 @@ public struct Session: Codable {
 
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-            let name = try container.decode(String.self, forKey: .name)
+            let name = (try container.decodeIfPresent(String.self, forKey: .name)) ?? ""
 
             let description = try container.decodeIfPresent(String.self, forKey: .description)
-            let url = try container.decode(URL.self, forKey: .url)
+            let url = try container.decodeIfPresent(URL.self, forKey: .url)
             let scheme = try container.decodeIfPresent(String.self, forKey: .scheme)
             let icons = (try? container.decodeIfPresent([URL].self, forKey: .icons)) ?? []
             self.init(name: name, description: description, icons: icons, url: url, scheme: scheme)
